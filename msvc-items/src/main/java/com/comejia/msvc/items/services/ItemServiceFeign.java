@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.comejia.msvc.items.clients.ProductFeignClient;
@@ -13,6 +14,7 @@ import com.comejia.msvc.items.models.Product;
 
 import feign.FeignException;
 
+//@Primary
 @Service
 public class ItemServiceFeign implements ItemService {
 

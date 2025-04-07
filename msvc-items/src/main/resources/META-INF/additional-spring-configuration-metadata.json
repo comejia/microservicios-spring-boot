@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "config.baseurl.msvc-products",
+  "type": "java.lang.String",
+  "description": "A description for 'config.baseurl.msvc-products'"
+}]}

@@ -1,0 +1,30 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: msvc-products
+        uri: lb://msvc-products
+        predicates:
+        - Path=/api/products/**
+        # - Header=Authorization, Bearer \d+
+        # - Method=GET, POST
+        # - Query=color
+        # - Cookie=color, azul
+        # - Header=Content-Type, application/json
+        filters:
+        - StripPrefix=2
+        - name: SampleCookie
+          args:
+            name: user
+            value: Cesar
+            message: Hola soy una cookie personalizada para productos
+      - id: msvc-items
+        uri: lb://msvc-items
+        predicates:
+        - Path=/api/items/**
+        filters:
+        - StripPrefix=2
+        - AddRequestHeader=token-request, aaaaaaa
+        - AddResponseHeader=token-response, bbbbbb
+        - AddRequestParameter=name, Octavio
+        #- SetResponseHeader=Content-Type, text/plain
