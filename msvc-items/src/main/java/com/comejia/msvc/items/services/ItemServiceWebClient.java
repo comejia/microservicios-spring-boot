@@ -44,7 +44,7 @@ public class ItemServiceWebClient implements ItemService {
         Map<String, Long> params = new HashMap<>();
         params.put("id", id);
 
-        try {
+        // try {
             return this.client.build()
                 .get()
                 .uri("/api/v1/products/{id}", params)
@@ -54,9 +54,9 @@ public class ItemServiceWebClient implements ItemService {
                 .map(product -> new Item(product, new Random().nextInt(10) + 1))
                 .map(item -> Optional.of(item))
                 .block();
-        } catch (WebClientResponseException e) {
-            return Optional.empty();
-        }
+        // } catch (WebClientResponseException e) {
+        //     return Optional.empty();
+        // }
     }
 
 }

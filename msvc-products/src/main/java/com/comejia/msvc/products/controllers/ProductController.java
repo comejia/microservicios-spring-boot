@@ -2,6 +2,7 @@ package com.comejia.msvc.products.controllers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,15 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> details(@PathVariable Long id) {
+    public ResponseEntity<Product> details(@PathVariable Long id) throws InterruptedException {
+        if (id.equals(10L)) {
+            throw new IllegalArgumentException("Invalid product ID");
+        }
+
+        if (id.equals(7L)) {
+            TimeUnit.SECONDS.sleep(4L);
+        }
+
         Optional<Product> productOptional = this.service.findById(id);
 
         if (productOptional.isPresent()) {
