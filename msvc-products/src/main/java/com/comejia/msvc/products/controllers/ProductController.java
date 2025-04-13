@@ -36,7 +36,7 @@ public class ProductController {
         }
 
         if (id.equals(7L)) {
-            TimeUnit.SECONDS.sleep(4L);
+            TimeUnit.SECONDS.sleep(3L);
         }
 
         Optional<Product> productOptional = this.service.findById(id);
