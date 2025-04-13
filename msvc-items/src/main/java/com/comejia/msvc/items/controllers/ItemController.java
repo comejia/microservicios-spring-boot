@@ -11,13 +11,19 @@ import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@RefreshScope
 @RestController
 @RequestMapping("/api/v1/items")
 public class ItemController {
@@ -33,11 +40,34 @@ public class ItemController {
     private final Logger logger = LoggerFactory.getLogger(ItemController.class);
     private final ItemService service;
     private final CircuitBreakerFactory circuitBreakerFactory;
+    @Value("${config.text}")
+    private String text;
+
+    @Autowired
+    private Environment environment;
 
     public ItemController(ItemService service, CircuitBreakerFactory circuitBreakerFactory) {
         this.service = service;
         this.circuitBreakerFactory = circuitBreakerFactory;
     }
+
+    @GetMapping("/configs")
+    public ResponseEntity<?> configs(@Value("${server.port}") String port) {
+        Map<String, String> json = new HashMap<>();
+        json.put("Texto", this.text);
+        json.put("Puerto", port);
+
+        this.logger.info("Texto: {}", this.text);
+        this.logger.info("Puerto: {}", port);
+
+        if (this.environment.getActiveProfiles().length > 0 && this.environment.getActiveProfiles()[0].equals("dev")) {
+            json.put("author.name", this.environment.getProperty("config.author.name"));
+            json.put("author.email", this.environment.getProperty("config.author.email"));
+        }
+
+        return ResponseEntity.ok(json);
+    }
+    
 
     @GetMapping
     public ResponseEntity<List<Item>> list(
