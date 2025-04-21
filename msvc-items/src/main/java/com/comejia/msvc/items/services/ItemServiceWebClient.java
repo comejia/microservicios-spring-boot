@@ -16,7 +16,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import com.comejia.msvc.items.models.Item;
 import com.comejia.msvc.items.models.Product;
 
-@Primary
+// @Primary
 @Service
 public class ItemServiceWebClient implements ItemService {
 
@@ -57,6 +57,47 @@ public class ItemServiceWebClient implements ItemService {
         // } catch (WebClientResponseException e) {
         //     return Optional.empty();
         // }
+    }
+
+    @Override
+    public Product save(Product product) {
+        return this.client.build()
+            .post()
+            .uri("/api/v1/products")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(product)
+            .retrieve()
+            .bodyToMono(Product.class)
+            .block();
+    }
+
+    @Override
+    public Product update(Product product, Long id) {
+        Map<String, Long> params = new HashMap<>();
+        params.put("id", id);
+
+        return this.client.build()
+            .put()
+            .uri("/api/v1/products/{id}", id)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(product)
+            .retrieve()
+            .bodyToMono(Product.class)
+            .block();
+    }
+
+    @Override
+    public void delete(Long id) {
+        Map<String, Long> params = new HashMap<>();
+        params.put("id", id);
+
+        this.client.build()
+            .delete()
+            .uri("/api/v1/products/{id}", params)
+            .retrieve()
+            .bodyToMono(Void.class)
+            .block();
     }
 
 }
