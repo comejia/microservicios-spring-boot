@@ -2,8 +2,9 @@ package com.comejia.msvc.items.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.comejia.msvc.commons.entities.Product;
 import com.comejia.msvc.items.models.Item;
-import com.comejia.msvc.items.models.Product;
+// import com.comejia.msvc.items.models.Product;
 import com.comejia.msvc.items.services.ItemService;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;

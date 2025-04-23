@@ -1,5 +1,7 @@
 package com.comejia.msvc.items.models;
 
+import com.comejia.msvc.commons.entities.Product;
+
 public class Item {
 
     private Product product;

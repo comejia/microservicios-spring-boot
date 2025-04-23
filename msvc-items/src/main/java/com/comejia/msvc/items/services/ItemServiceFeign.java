@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import com.comejia.msvc.commons.entities.Product;
 import com.comejia.msvc.items.clients.ProductFeignClient;
 import com.comejia.msvc.items.models.Item;
-import com.comejia.msvc.items.models.Product;
+// import com.comejia.msvc.items.models.Product;
 
 import feign.FeignException;
 

@@ -13,8 +13,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.Builder;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import com.comejia.msvc.commons.entities.Product;
 import com.comejia.msvc.items.models.Item;
-import com.comejia.msvc.items.models.Product;
+// import com.comejia.msvc.items.models.Product;
 
 // @Primary
 @Service
