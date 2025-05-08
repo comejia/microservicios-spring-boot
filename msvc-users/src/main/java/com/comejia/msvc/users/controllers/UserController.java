@@ -47,14 +47,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        return this.userService.findById(id)
-            .map(userDb -> {
-                userDb.setUsername(user.getUsername());
-                userDb.setEmail(user.getEmail());
-                userDb.setEnabled(user.isEnabled());
-                User updatedUser = this.userService.save(userDb);
-                return ResponseEntity.status(HttpStatus.CREATED).body(updatedUser);
-            })
+        return this.userService.update(user, id)
+            .map(updatedUser -> ResponseEntity.status(HttpStatus.CREATED).body(updatedUser))
             .orElse(ResponseEntity.notFound().build());
     }
 

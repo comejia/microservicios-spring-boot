@@ -1,13 +1,22 @@
 package com.comejia.msvc.users.entities;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "users")
@@ -24,12 +33,25 @@ public class User {
     @NotBlank
     private String password;
 
-    private boolean enabled;
+    private Boolean enabled;
 
     @NotBlank
     @Email
     @Column(unique = true)
     private String email;
+
+    @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
+    @ManyToMany
+    @JoinTable(
+        name = "users_roles",
+        joinColumns = {@JoinColumn(name = "user_id")},
+        inverseJoinColumns = {@JoinColumn(name = "role_id")},
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role_id"})}
+    )
+    private List<Role> roles;
+
+    @Transient
+    private boolean admin;
 
     public Long getId() {
         return id;
@@ -55,11 +77,11 @@ public class User {
         this.password = password;
     }
 
-    public boolean isEnabled() {
+    public Boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -69,5 +91,21 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }
