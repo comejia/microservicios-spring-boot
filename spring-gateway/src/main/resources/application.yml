@@ -44,51 +44,52 @@ spring:
 
   cloud:
     gateway:
-      routes:
-      - id: msvc-products
-        uri: lb://msvc-products
-        predicates:
-        - Path=/api/products/**
-        # - Header=Authorization, Bearer \d+
-        # - Method=GET, POST
-        # - Query=color
-        # - Cookie=color, azul
-        # - Header=Content-Type, application/json
-        filters:
-        - StripPrefix=2
-        - name: SampleCookie
-          args:
-            name: user
-            value: Cesar
-            message: Hola soy una cookie personalizada para productos
-        #- CircuitBreaker=products
-        - name: CircuitBreaker
-          args:
-            name: products
-            statusCodes: 500
-            fallbackUri: forward:/api/items/api/v1/items/5
+      mvc:
+        routes:
+        - id: msvc-products
+          uri: lb://msvc-products
+          predicates:
+          - Path=/api/products/**
+          # - Header=Authorization, Bearer \d+
+          # - Method=GET, POST
+          # - Query=color
+          # - Cookie=color, azul
+          # - Header=Content-Type, application/json
+          filters:
+          - StripPrefix=2
+          #- name: SampleCookie
+            #args:
+              #name: user
+              #value: Cesar
+              #message: Hola soy una cookie personalizada para productos
+          #- CircuitBreaker=products
+          - name: CircuitBreaker
+            args:
+              name: products
+              statusCodes: 500
+              fallbackUri: forward:/api/items/api/v1/items/5
 
-      - id: msvc-items
-        uri: lb://msvc-items
-        predicates:
-        - Path=/api/items/**
-        filters:
-        - StripPrefix=2
-        - AddRequestHeader=token-request, aaaaaaa
-        - AddResponseHeader=token-response, bbbbbb
-        - AddRequestParameter=name, Octavio
-        #- SetResponseHeader=Content-Type, text/plain
+        - id: msvc-items
+          uri: lb://msvc-items
+          predicates:
+          - Path=/api/items/**
+          filters:
+          - StripPrefix=2
+          - AddRequestHeader=token-request, aaaaaaa
+          - AddResponseHeader=token-response, bbbbbb
+          - AddRequestParameter=name, Octavio
+          #- SetResponseHeader=Content-Type, text/plain
 
-      - id: msvc-users
-        uri: lb://msvc-users
-        predicates:
-        - Path=/api/users/**
-        filters:
-        - StripPrefix=2
+        - id: msvc-users
+          uri: lb://msvc-users
+          predicates:
+          - Path=/api/users/**
+          filters:
+          - StripPrefix=2
 
-      - id: msvc-oauth
-        uri: lb://msvc-oauth
-        predicates:
-        - Path=/api/security/**
-        filters:
-        - StripPrefix=2
+        - id: msvc-oauth
+          uri: lb://msvc-oauth
+          predicates:
+          - Path=/api/security/**
+          filters:
+          - StripPrefix=2

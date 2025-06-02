@@ -4,15 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.security.web.server.SecurityWebFilterChain;
-
-import reactor.core.publisher.Mono;
+import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -23,33 +23,34 @@ import java.util.stream.Collectors;
 public class SecurityConfig {
 
     @Bean
-    SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        return http
-            .authorizeExchange(auth -> {
-                auth.pathMatchers("/authorized", "/logout").permitAll()
-                    .pathMatchers(HttpMethod.GET, "/api/items/api/v1/items", "/api/products/api/v1/products", "/api/users/api/v1/users")
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http.authorizeHttpRequests(auth -> { 
+                auth.requestMatchers("/authorized", "/logout")
                         .permitAll()
-                    .pathMatchers(HttpMethod.GET, "/api/items/api/v1/items/{id}", "/api/products/api/v1/products/{id}", "/api/users/api/v1/users/{id}")
+                    .requestMatchers(HttpMethod.GET, "/api/items/api/v1/items", "/api/products/api/v1/products", "/api/users/api/v1/users")
+                        .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/items/api/v1/items/{id}", "/api/products/api/v1/products/{id}", "/api/users/api/v1/users/{id}")
                         .hasAnyRole("ADMIN", "USER")
                     // .pathMatchers(HttpMethod.POST, "/api/items", "/api/products", "/api/users").hasRole("ADMIN")
                     // .pathMatchers(HttpMethod.PUT, "/api/items/{id}", "/api/products/{id}", "/api/users/{id}").hasRole("ADMIN")
                     // .pathMatchers(HttpMethod.DELETE, "/api/items/{id}", "/api/products/{id}", "/api/users/{id}").hasRole("ADMIN")
-                    .pathMatchers("/api/items/api/v1/items/**", "/api/products/api/v1/products/**", "/api/users/api/v1/users/**")
+                    .requestMatchers("/api/items/api/v1/items/**", "/api/products/api/v1/products/**", "/api/users/api/v1/users/**")
                         .hasRole("ADMIN")
-                    .anyExchange().authenticated();
+                    .anyRequest().authenticated();
             })
             .cors(csrf -> csrf.disable())
-            .oauth2Login(withDefaults())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .oauth2Login(login -> login.loginPage("/oauth2/authorization/client-app"))
             .oauth2Client(withDefaults())
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(
-                new Converter<Jwt, Mono<AbstractAuthenticationToken>>() {
+                new Converter<Jwt, AbstractAuthenticationToken>() {
                     @Override
-                    public Mono<AbstractAuthenticationToken> convert(Jwt jwt) {
+                    public AbstractAuthenticationToken convert(@NonNull Jwt jwt) {
                         Collection<String> roles = jwt.getClaimAsStringList("roles");
                         Collection<GrantedAuthority> authorities = roles.stream()
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
-                        return Mono.just(new JwtAuthenticationToken(jwt, authorities));
+                        return new JwtAuthenticationToken(jwt, authorities);
                     }
                 })
             ))
