@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
@@ -44,7 +45,7 @@ public class SecurityConfig {
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(
                 new Converter<Jwt, Mono<AbstractAuthenticationToken>>() {
                     @Override
-                    public Mono<AbstractAuthenticationToken> convert(Jwt jwt) {
+                    public Mono<AbstractAuthenticationToken> convert(@NonNull Jwt jwt) {
                         Collection<String> roles = jwt.getClaimAsStringList("roles");
                         Collection<GrantedAuthority> authorities = roles.stream()
                             .map(SimpleGrantedAuthority::new)

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,11 +23,13 @@ import com.comejia.msvc.oauth.models.User;
 @Service
 public class UserService implements UserDetailsService {
 
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Autowired
     private WebClient.Builder client;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        this.logger.info("UserService - Obteniendo usuario con username: {}", username);
         Map<String, String> params = new HashMap<>();
         params.put("username", username);
 
@@ -52,6 +56,7 @@ public class UserService implements UserDetailsService {
                 roles
             );
         } catch (WebClientResponseException e) {
+            this.logger.error("Error al obtener el usuario: {}", username);
             throw new UsernameNotFoundException("User not found: " + username, e);
         }
     }

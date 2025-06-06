@@ -2,8 +2,9 @@ package com.comejia.msvc.products.controllers;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +25,7 @@ import com.comejia.msvc.products.services.ProductService;
 @RequestMapping("/api/v1/products")
 public class ProductController {
 
+    private final Logger logger = LoggerFactory.getLogger(ProductController.class);
     final private ProductService service;
 
     public ProductController(ProductService service) {
@@ -32,11 +34,13 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<Product>> list() {
+        this.logger.info("Llamada a metodo controller ProductController::list()");
         return ResponseEntity.ok(this.service.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> details(@PathVariable Long id) throws InterruptedException {
+        this.logger.info("Llamada a metodo controller ProductController::details()");
         if (id.equals(10L)) {
             //throw new IllegalArgumentException("Invalid product ID");
         }
@@ -55,12 +59,14 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Product> create(@RequestBody Product product) {
+        this.logger.info("ProductController - Creando producto: {}", product);
         Product newProduct = this.service.save(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
+        this.logger.info("ProductController - Actualizando producto: {}", product);
         Optional<Product> productOptional = this.service.findById(id);
 
         if (productOptional.isPresent()) {
@@ -75,6 +81,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
+        this.logger.info("ProductController - Eliminando producto con id: {}", id);
         Optional<Product> productOptional = this.service.findById(id);
 
         if (productOptional.isPresent()) {

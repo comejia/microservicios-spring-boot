@@ -10,4 +10,16 @@ public class SpringGatewayApplication {
 		SpringApplication.run(SpringGatewayApplication.class, args);
 	}
 
+	// Codigo en caso que no funcione "products" cuando el gateway es MVC
+	// @Bean
+	// RouterFunction<ServerResponse> routerFunction() {
+	// 	return route("msvc-products")
+	// 		.route(path("/api/products/**"), http())
+	// 		.filter(lb("msvc-products"))
+	// 		.filter(circuitBreaker(config -> config.setId("products")
+	// 			.setStatusCodes("500")
+	// 			.setFallbackPath("forward:/api/items/api/v1/items/5")))
+	// 		.before(stripePrefix(2))
+	// 		.build();
+	// }
 }

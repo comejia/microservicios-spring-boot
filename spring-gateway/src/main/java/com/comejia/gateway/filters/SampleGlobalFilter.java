@@ -22,7 +22,7 @@ public class SampleGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        logger.info("PRE-REQUEST: Global filter executed");
+        this.logger.info("PRE-REQUEST: Global filter executed");
 
         //exchange.getRequest().mutate().headers(h -> h.add("token", "abcdef"));
         ServerHttpRequest newRequest = exchange.getRequest().mutate().header("token", "abcdef").build();
@@ -30,12 +30,12 @@ public class SampleGlobalFilter implements GlobalFilter, Ordered {
         ServerWebExchange newExchange = exchange.mutate().request(newRequest).build();
 
         return chain.filter(newExchange).then(Mono.fromRunnable(() -> {
-            logger.info("POST-REQUEST: Global filter executed");
+            this.logger.info("POST-REQUEST: Global filter executed");
 
             Optional<String> token = Optional.ofNullable(newExchange.getRequest().getHeaders().getFirst("token"));
 
             token.ifPresent(value -> {
-                logger.info("POST-REQUEST: Token: {}", value);
+                this.logger.info("POST-REQUEST: Token: {}", value);
                 newExchange.getResponse().getHeaders().add("token", value);
             });
 

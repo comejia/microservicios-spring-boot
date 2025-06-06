@@ -72,15 +72,16 @@ public class ItemController {
 
         return ResponseEntity.ok(json);
     }
-    
+
 
     @GetMapping
     public ResponseEntity<List<Item>> list(
         @RequestHeader(name = "token-request", required = false) String token,
         @RequestParam(name = "name", required = false) String name
     ) {
-        System.out.println("Token: " + token);
-        System.out.println("Name: " + name);
+        this.logger.info("Llamada a metodo controller ItemController::list()");
+        this.logger.info("Request header token: {}", token);
+        this.logger.info("Request parameter name: {}", name);
 
         return ResponseEntity.ok(this.service.findAll());
     }
@@ -173,16 +174,19 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Product product) {
+        this.logger.info("ItemController - Creando producto: {}", product);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.service.save(product));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@RequestBody Product product, @PathVariable Long id) {
+        this.logger.info("ItemController - Actualizando producto: {}", product);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.service.update(product, id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
+        this.logger.info("ItemController - Eliminando producto con id: {}", id);
         this.service.delete(id);
         return ResponseEntity.noContent().build();
     }
