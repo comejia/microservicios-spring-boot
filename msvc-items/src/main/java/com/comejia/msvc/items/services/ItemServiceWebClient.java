@@ -6,12 +6,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
-import org.springframework.context.annotation.Primary;
+// import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClient.Builder;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+// import org.springframework.web.reactive.function.client.WebClient.Builder;
+// import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import com.comejia.msvc.commons.entities.Product;
 import com.comejia.msvc.items.models.Item;
@@ -21,15 +21,15 @@ import com.comejia.msvc.items.models.Item;
 @Service
 public class ItemServiceWebClient implements ItemService {
 
-    private final WebClient.Builder client;
+    private final WebClient client;
 
-    public ItemServiceWebClient(Builder client) {
+    public ItemServiceWebClient(WebClient client) {
         this.client = client;
     }
 
     @Override
     public List<Item> findAll() {
-        return this.client.build()
+        return this.client
             .get()
             .uri("/api/v1/products")
             .accept(MediaType.APPLICATION_JSON)
@@ -46,7 +46,7 @@ public class ItemServiceWebClient implements ItemService {
         params.put("id", id);
 
         // try {
-            return this.client.build()
+            return this.client
                 .get()
                 .uri("/api/v1/products/{id}", params)
                 .accept(MediaType.APPLICATION_JSON)
@@ -62,7 +62,7 @@ public class ItemServiceWebClient implements ItemService {
 
     @Override
     public Product save(Product product) {
-        return this.client.build()
+        return this.client
             .post()
             .uri("/api/v1/products")
             .contentType(MediaType.APPLICATION_JSON)
@@ -77,7 +77,7 @@ public class ItemServiceWebClient implements ItemService {
         Map<String, Long> params = new HashMap<>();
         params.put("id", id);
 
-        return this.client.build()
+        return this.client
             .put()
             .uri("/api/v1/products/{id}", id)
             .accept(MediaType.APPLICATION_JSON)
@@ -93,7 +93,7 @@ public class ItemServiceWebClient implements ItemService {
         Map<String, Long> params = new HashMap<>();
         params.put("id", id);
 
-        this.client.build()
+        this.client
             .delete()
             .uri("/api/v1/products/{id}", params)
             .retrieve()

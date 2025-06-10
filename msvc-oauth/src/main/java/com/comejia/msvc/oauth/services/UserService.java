@@ -25,7 +25,7 @@ public class UserService implements UserDetailsService {
 
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Autowired
-    private WebClient.Builder client;
+    private WebClient client;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService {
         params.put("username", username);
 
         try {
-            User user = client.build()
+            User user = client
                     .get()
                     .uri("/api/v1/users/username/{username}", params)
                     .accept(MediaType.APPLICATION_JSON)

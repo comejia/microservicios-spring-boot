@@ -24,14 +24,14 @@ public class SampleCookieGatewayFilterFactory extends AbstractGatewayFilterFacto
     @Override
     public GatewayFilter apply(ConfigurationCookie config) {
         return new OrderedGatewayFilter((exchange, chain) -> {
-            logger.info("PRE-FILTER-FACTORY: SampleCookieGatewayFilterFactory executed - {}", config.getMessage());
+            this.logger.info("PRE-FILTER-FACTORY: SampleCookieGatewayFilterFactory executed - {}", config.getMessage());
 
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                 Optional.ofNullable(config.getValue()).ifPresent(cookie -> {
-                    logger.info("POST-FILTER-FACTORY: Cookie value: {}", cookie);
+                    this.logger.info("POST-FILTER-FACTORY: Cookie value: {}", cookie);
                     exchange.getResponse().addCookie(ResponseCookie.from(config.getName(), cookie).build());
                 });
-                logger.info("POST-FILTER-FACTORY: SampleCookieGatewayFilterFactory executed - {}", config.getMessage());
+                this.logger.info("POST-FILTER-FACTORY: SampleCookieGatewayFilterFactory executed - {}", config.getMessage());
             }));
         }, 100);
     }
