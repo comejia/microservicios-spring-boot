@@ -1,0 +1,52 @@
+# Microservicios con Spring Boot
+
+Gestion de productos usando microservicios
+
+
+## Características 📋
+
+* Arquitectura de Microservicios con Spring Boot y Spring Cloud
+    * Servicios disponibles: Products, Items, Users, OAuth, Gateway
+* Configuración centralizada
+* Autenticación con OAuth2
+* Uso del patron Circuit Breaker para resiliencia
+* Observabilidad con Micrometer para las trazas
+
+
+## Tecnologias 🔧
+:hammer_and_wrench:
+* Java 21
+* Spring boot 3 y Spring Cloud (Eureka, Config y Gateway)
+* OAuth2
+* Zipkin
+* Elasticsearch
+* MySQL
+* Docker
+* Docker compose
+* Postman
+
+
+## Instalación 🔌
+
+```bash
+$ docker-compose up
+```
+
+
+## Uso 💻
+
+Para ver los microservicios disponibles (Service discovery): http://localhost:8761/
+
+Visualización de las trazas: http://localhost:9411/zipkin
+
+
+## Referencias 🔍
+
+* [Spring Boot](https://spring.io/projects/spring-boot)
+* [Spring Cloud](https://spring.io/projects/spring-cloud)
+* [Zipkin](https://zipkin.io/)
+* [Micrometer trazing](https://docs.micrometer.io/tracing/reference/)
+* [Opentelemetry](https://opentelemetry.io/docs/languages/java/)
+* [Microservicios](https://spring.io/microservices)
+
+
