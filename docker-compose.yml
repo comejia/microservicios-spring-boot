@@ -1,8 +1,8 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   elasticsearch:
-    image: elasticsearch:7.17.25
+    image: elasticsearch:7.17.28
     environment:
       - discovery.type=single-node
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
