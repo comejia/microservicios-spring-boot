@@ -3,7 +3,7 @@
 Gestion de productos usando microservicios
 
 
-## Características 📋
+## Características :clipboard:
 
 * Arquitectura de Microservicios con Spring Boot y Spring Cloud
     * Servicios disponibles: Products, Items, Users, OAuth, Gateway
@@ -25,21 +25,21 @@ Gestion de productos usando microservicios
 * Postman
 
 
-## Instalación 🔌
+## Instalación :electric_plug:
 
 ```bash
 $ docker-compose up
 ```
 
 
-## Uso 💻
+## Uso :computer:
 
 Para ver los microservicios disponibles (Service discovery): http://localhost:8761/
 
 Visualización de las trazas: http://localhost:9411/zipkin
 
 
-## Referencias 🔍
+## Referencias :mag:
 
 * [Spring Boot](https://spring.io/projects/spring-boot)
 * [Spring Cloud](https://spring.io/projects/spring-cloud)
