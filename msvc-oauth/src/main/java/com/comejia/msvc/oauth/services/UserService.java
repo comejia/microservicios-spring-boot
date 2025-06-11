@@ -20,12 +20,18 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import com.comejia.msvc.oauth.models.User;
 
+import io.micrometer.tracing.Tracer;
+
 @Service
 public class UserService implements UserDetailsService {
 
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     private WebClient client;
+
+    @Autowired
+    private Tracer tracer;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -46,6 +52,8 @@ public class UserService implements UserDetailsService {
                     .map(role -> new SimpleGrantedAuthority(role.getName()))
                     .collect(Collectors.toList());
 
+            tracer.currentSpan().tag("success.login.message", "Usuario encontrado: " + username);
+
             return new org.springframework.security.core.userdetails.User(
                 user.getUsername(), 
                 user.getPassword(), 
@@ -56,7 +64,8 @@ public class UserService implements UserDetailsService {
                 roles
             );
         } catch (WebClientResponseException e) {
-            this.logger.error("Error al obtener el usuario: {}", username);
+            this.logger.error("Oauth - Error al obtener el usuario: {}", username);
+            tracer.currentSpan().tag("error.login.message", e.getMessage());
             throw new UsernameNotFoundException("User not found: " + username, e);
         }
     }

@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  elasticsearch:
+    image: elasticsearch:7.17.25
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    container_name: elasticsearch
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    environment:
+      - STORAGE_TYPE=elasticsearch
+      - ES_HOSTS=http://elasticsearch:9200
+      #- ZIPKIN_STORAGE_ELASTICSEARCH_INDEX=zipkin-span
+    ports:
+      - "9411:9411"
+    depends_on:
+      - elasticsearch
+    container_name: zipkin
+
+volumes:
+  esdata:
