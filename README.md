@@ -13,8 +13,7 @@ Gestion de productos usando microservicios
 * Observabilidad con Micrometer para las trazas
 
 
-## Tecnologias 🔧
-:hammer_and_wrench:
+## Tecnologias :hammer_and_wrench:
 * Java 21
 * Spring boot 3 y Spring Cloud (Eureka, Config y Gateway)
 * OAuth2
