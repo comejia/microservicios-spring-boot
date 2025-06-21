@@ -1,0 +1,159 @@
+services:
+
+  config-server:
+    image: config-server
+    container_name: config-server
+    build:
+      context: config-server
+    environment:
+      - CONFIG_SERVER_URI=${CONFIG_SERVER_URI}
+    ports:
+      - 8888:8888
+    restart: always
+    hostname: ${CONFIG_SERVER_HOSTNAME}
+    networks:
+      - microservices
+
+  eureka-server:
+    image: eureka-server
+    container_name: eureka-server
+    build:
+      context: eureka-server
+    ports:
+      - 8761:8761
+    restart: always
+    hostname: ${EUREKA_HOSTNAME}
+    networks:
+      - microservices
+  
+  gateway:
+    image: gateway
+    container_name: gateway
+    build:
+      context: spring-gateway
+    environment:
+      - EUREKA_HOSTNAME=${EUREKA_HOSTNAME}
+      - ZIPKIN_HOSTNAME=${ZIPKIN_HOSTNAME}
+    ports:
+      - 8090:8090
+    restart: always
+    depends_on:
+      - products
+      - items
+      - users
+      - auth
+      - eureka-server
+    networks:
+      - microservices
+
+  products:
+    image: products
+    container_name: products
+    build:
+      context: msvc-products
+    environment:
+      - MARIADB_HOSTNAME=${MARIADB_HOSTNAME}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - EUREKA_HOSTNAME=${EUREKA_HOSTNAME}
+      - ZIPKIN_HOSTNAME=${ZIPKIN_HOSTNAME}
+    #ports:
+      #- 8080:8080
+    restart: always
+    depends_on:
+      - commons
+      - db
+      - eureka-server
+    networks:
+      - microservices
+    # volumes:
+    #   - maven-repo:/root/.m2/repository
+  
+  items:
+    image: items
+    container_name: items
+    build:
+      context: msvc-items
+    environment:
+      - CONFIG_SERVER_HOSTNAME=${CONFIG_SERVER_HOSTNAME}
+      - EUREKA_HOSTNAME=${EUREKA_HOSTNAME}
+      - ZIPKIN_HOSTNAME=${ZIPKIN_HOSTNAME}
+    ports:
+      - 8005:8005
+      - 8007:8007
+      - 9001:9001
+    restart: always
+    depends_on:
+      - commons
+      - products
+      - config-server
+      - eureka-server
+    networks:
+      - microservices
+    # volumes:
+    #   - maven-repo:/root/.m2/repository
+
+  users:
+    image: users
+    container_name: users
+    build:
+      context: msvc-users
+    environment:
+      - MARIADB_HOSTNAME=${MARIADB_HOSTNAME}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - EUREKA_HOSTNAME=${EUREKA_HOSTNAME}
+      - ZIPKIN_HOSTNAME=${ZIPKIN_HOSTNAME}
+    #ports:
+      #- 8080:8080
+    restart: always
+    depends_on:
+      - db
+      - eureka-server
+    networks:
+      - microservices
+
+  auth:
+    image: auth
+    container_name: auth
+    build:
+      context: msvc-oauth
+    environment:
+      - EUREKA_HOSTNAME=${EUREKA_HOSTNAME}
+      - ZIPKIN_HOSTNAME=${ZIPKIN_HOSTNAME}
+    ports:
+      - 9100:9100
+    restart: always
+    depends_on:
+      - eureka-server
+    networks:
+      - microservices
+
+  commons:
+    image: commons
+    container_name: commons
+    build:
+      context: msvc-commons
+    # volumes:
+    #   - maven-repo:/root/.m2/repository
+
+  db:
+    image: mariadb:11.8.2
+    container_name: mariadb11
+    environment:
+      #- MARIADB_ROOT_PASSWORD=
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=1
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+    ports:
+      - 3307:3306
+    restart: always
+    hostname: ${MARIADB_HOSTNAME}
+    networks:
+      - microservices
+    volumes:
+      - data:/var/lib/mysql
+
+networks:
+  microservices:
+
+volumes:
+  data:
+#   maven-repo:

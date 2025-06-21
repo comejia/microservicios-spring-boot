@@ -67,5 +67,4 @@ public class Product {
     public void setPort(int port) {
         this.port = port;
     }
-
 }

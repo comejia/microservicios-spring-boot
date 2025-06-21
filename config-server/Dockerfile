@@ -1,0 +1,14 @@
+FROM maven:3.9-amazoncorretto-21-alpine as builder
+
+WORKDIR /app
+COPY pom.xml .
+COPY src src
+RUN mvn clean package -DskipTests
+
+
+FROM eclipse-temurin:21-jre-alpine as runtime
+
+COPY --from=builder /app/target/*.jar config-server.jar
+EXPOSE 8888
+
+CMD ["java", "-jar", "config-server.jar"]

@@ -1,0 +1,14 @@
+FROM maven:3.9-amazoncorretto-21-alpine as builder
+
+WORKDIR /app
+COPY pom.xml .
+COPY src src
+RUN mvn clean package -DskipTests
+
+
+FROM eclipse-temurin:21-jre-alpine as runtime
+
+COPY --from=builder /app/target/*.jar eureka-server.jar
+EXPOSE 8761
+
+CMD ["java", "-jar", "eureka-server.jar"]

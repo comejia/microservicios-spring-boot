@@ -8,7 +8,7 @@ Gestion de productos usando microservicios
 * Arquitectura de Microservicios con Spring Boot y Spring Cloud
     * Servicios disponibles: Products, Items, Users, OAuth, Gateway
 * Configuración centralizada
-* Autenticación con OAuth2
+* Autorización con OAuth2
 * Uso del patron Circuit Breaker para resiliencia
 * Observabilidad con Micrometer para las trazas
 
@@ -47,5 +47,6 @@ Visualización de las trazas: http://localhost:9411/zipkin
 * [Micrometer trazing](https://docs.micrometer.io/tracing/reference/)
 * [Opentelemetry](https://opentelemetry.io/docs/languages/java/)
 * [Microservicios](https://spring.io/microservices)
+* [Access/Refresh token](https://datatracker.ietf.org/doc/html/rfc6749#section-1.4)
 
 
