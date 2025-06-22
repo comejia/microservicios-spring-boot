@@ -27,8 +27,19 @@ Gestion de productos usando microservicios
 
 ## Instalación :electric_plug:
 
+1) Levantar Zipkin
 ```bash
-$ docker-compose up
+$ docker-compose -f docker-compose-tracing.yml up --build
+```
+
+2) Levantar los microservicios
+```bash
+$ docker-compose -f docker-compose-microservices.yml up --build
+```
+
+3) Importar los datos en la DB:
+```bash
+$ mariadb-dump -u root --databases microservicios > ./projects/backup/microservicios.sql
 ```
 
 

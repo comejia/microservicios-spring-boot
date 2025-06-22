@@ -1,6 +1,7 @@
-#FROM maven:3.9-amazoncorretto-21-alpine as builder
-# using commons as image because this project has a dependency on commons
+# Using commons image as base because this project has a dependency on pom.xml
+# and we first need to build the project.
 FROM commons as builder
+#FROM maven:3.9-amazoncorretto-21-alpine as builder
 
 WORKDIR /app
 COPY pom.xml .
