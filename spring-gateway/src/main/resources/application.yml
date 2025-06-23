@@ -24,7 +24,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://127.0.0.1:9100
+          issuer-uri: http://${AUTH_HOSTNAME:127.0.0.1}:9100
       client:
         registration:
           client-app:
@@ -39,7 +39,9 @@ spring:
             client-name: client-app
         provider:
           spring:
-            issuer-uri: http://127.0.0.1:9100
+            issuer-uri: http://${AUTH_HOSTNAME:127.0.0.1}:9100
+            authorization-uri: http://localhost:9100/oauth2/authorize
+            token-uri: http://localhost:9100/oauth2/token
               
 
   cloud:

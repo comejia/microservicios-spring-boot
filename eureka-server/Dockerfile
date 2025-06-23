@@ -8,7 +8,7 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:21-jre-alpine as runtime
 
-COPY --from=builder /app/target/*.jar eureka-server.jar
+COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8761
 
-CMD ["java", "-jar", "eureka-server.jar"]
+CMD ["java", "-jar", "app.jar"]

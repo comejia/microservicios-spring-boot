@@ -8,7 +8,7 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:21-jre-alpine as runtime
 
-COPY --from=builder /app/target/*.jar config-server.jar
+COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8888
 
-CMD ["java", "-jar", "config-server.jar"]
+CMD ["java", "-jar", "app.jar"]

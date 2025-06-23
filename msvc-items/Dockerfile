@@ -11,7 +11,7 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:21-jre-alpine as runtime
 
-COPY --from=builder /app/target/*.jar items.jar
+COPY --from=builder /app/target/*.jar app.jar
 #EXPOSE 9001
 
-CMD ["java", "-jar", "items.jar"]
+CMD ["java", "-jar", "app.jar"]

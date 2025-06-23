@@ -39,9 +39,13 @@ $ docker-compose -f docker-compose-microservices.yml up --build
 
 3) Importar los datos en la DB:
 ```bash
-$ mariadb-dump -u root --databases microservicios > ./projects/backup/microservicios.sql
+$ mariadb -u root --databases microservicios < ./projects/backup/microservicios.sql
 ```
 
+4) (Opcional) Exportar los datos de la DB:
+```bash
+$ mariadb-dump -u root --databases microservicios > ./projects/backup/microservicios.sql
+```
 
 ## Uso :computer:
 

@@ -8,7 +8,7 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:21-jre-alpine as runtime
 
-COPY --from=builder /app/target/*.jar auth.jar
+COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 9100
 
-CMD ["java", "-jar", "auth.jar"]
+CMD ["java", "-jar", "app.jar"]

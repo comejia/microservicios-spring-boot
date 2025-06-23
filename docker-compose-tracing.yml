@@ -10,7 +10,7 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
     networks:
-      - tracing
+      - collector
 
   zipkin:
     image: openzipkin/zipkin
@@ -25,12 +25,12 @@ services:
       - storage
     hostname: ${ZIPKIN_HOSTNAME}
     networks:
-      - microservices
+      - collector
       - tracing
 
 volumes:
   esdata:
 
 networks:
-  microservices:
+  collector:
   tracing:

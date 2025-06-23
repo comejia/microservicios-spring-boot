@@ -34,6 +34,7 @@ services:
     environment:
       - EUREKA_HOSTNAME=${EUREKA_HOSTNAME}
       - ZIPKIN_HOSTNAME=${ZIPKIN_HOSTNAME}
+      - AUTH_HOSTNAME=${AUTH_HOSTNAME}
     ports:
       - 8090:8090
     restart: always
@@ -45,10 +46,11 @@ services:
       - eureka-server
     networks:
       - microservices
+      - tracing
 
   products:
     image: products
-    container_name: products
+    # container_name: products
     build:
       context: msvc-products
     environment:
@@ -59,14 +61,16 @@ services:
     #ports:
       #- 8080:8080
     restart: always
+    deploy:
+      replicas: 1
     depends_on:
       - commons
       - db
       - eureka-server
     networks:
       - microservices
-    # volumes:
-    #   - maven-repo:/root/.m2/repository
+      - store
+      - tracing
   
   items:
     image: items
@@ -90,8 +94,7 @@ services:
       - eureka-server
     networks:
       - microservices
-    # volumes:
-    #   - maven-repo:/root/.m2/repository
+      - tracing
 
   users:
     image: users
@@ -111,6 +114,8 @@ services:
       - eureka-server
     networks:
       - microservices
+      - store
+      - tracing
 
   auth:
     image: auth
@@ -120,21 +125,22 @@ services:
     environment:
       - EUREKA_HOSTNAME=${EUREKA_HOSTNAME}
       - ZIPKIN_HOSTNAME=${ZIPKIN_HOSTNAME}
+      - OAUTH_ISSUER=${AUTH_HOSTNAME}
     ports:
       - 9100:9100
     restart: always
+    hostname: ${AUTH_HOSTNAME}
     depends_on:
       - eureka-server
     networks:
       - microservices
+      - tracing
 
   commons:
     image: commons
     container_name: commons
     build:
       context: msvc-commons
-    # volumes:
-    #   - maven-repo:/root/.m2/repository
 
   db:
     image: mariadb:11.8.2
@@ -148,13 +154,14 @@ services:
     restart: always
     hostname: ${MARIADB_HOSTNAME}
     networks:
-      - microservices
+      - store
     volumes:
       - data:/var/lib/mysql
 
 networks:
   microservices:
+  store:
+  tracing:
 
 volumes:
   data:
-#   maven-repo:
