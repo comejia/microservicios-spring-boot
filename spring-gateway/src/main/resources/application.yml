@@ -94,3 +94,18 @@ spring:
         - Path=/api/security/**
         filters:
         - StripPrefix=2
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Product service
+        url: /api/products/v3/api-docs
+      - name: Item service
+        url: /api/items/v3/api-docs
+      - name: User service
+        url: /api/users/v3/api-docs
+      # - name: Auth service
+      #   url: /api/security/v3/api-docs
+  # api-docs:
+  #  enabled: true
+

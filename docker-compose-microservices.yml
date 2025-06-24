@@ -89,8 +89,8 @@ services:
     restart: always
     depends_on:
       - commons
-      - products
       - config-server
+      - products
       - eureka-server
     networks:
       - microservices

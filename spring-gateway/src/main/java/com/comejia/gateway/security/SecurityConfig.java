@@ -26,18 +26,27 @@ public class SecurityConfig {
     @Bean
     SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
-            .authorizeExchange(auth -> {
-                auth.pathMatchers("/authorized", "/logout").permitAll()
-                    .pathMatchers(HttpMethod.GET, "/api/items/api/v1/items", "/api/products/api/v1/products", "/api/users/api/v1/users")
-                        .permitAll()
-                    .pathMatchers(HttpMethod.GET, "/api/items/api/v1/items/{id}", "/api/products/api/v1/products/{id}", "/api/users/api/v1/users/{id}")
-                        .hasAnyRole("ADMIN", "USER")
-                    // .pathMatchers(HttpMethod.POST, "/api/items", "/api/products", "/api/users").hasRole("ADMIN")
-                    // .pathMatchers(HttpMethod.PUT, "/api/items/{id}", "/api/products/{id}", "/api/users/{id}").hasRole("ADMIN")
-                    // .pathMatchers(HttpMethod.DELETE, "/api/items/{id}", "/api/products/{id}", "/api/users/{id}").hasRole("ADMIN")
-                    .pathMatchers("/api/items/api/v1/items/**", "/api/products/api/v1/products/**", "/api/users/api/v1/users/**")
-                        .hasRole("ADMIN")
-                    .anyExchange().authenticated();
+            .authorizeExchange(auth -> { auth
+                .pathMatchers("/authorized", "/logout").permitAll()
+                .pathMatchers(
+                    "/swagger-ui.html",
+                    "/swagger-ui/**", 
+                    "/v3/api-docs/**",
+                    "/api/products/v3/api-docs",
+                    "/api/items/v3/api-docs",
+                    "/api/users/v3/api-docs",
+                    "/api/security/v3/api-docs"
+                ).permitAll()
+                .pathMatchers(HttpMethod.GET, "/api/items/api/v1/items", "/api/products/api/v1/products", "/api/users/api/v1/users")
+                    .permitAll()
+                .pathMatchers(HttpMethod.GET, "/api/items/api/v1/items/{id}", "/api/products/api/v1/products/{id}", "/api/users/api/v1/users/{id}")
+                    .hasAnyRole("ADMIN", "USER")
+                // .pathMatchers(HttpMethod.POST, "/api/items", "/api/products", "/api/users").hasRole("ADMIN")
+                // .pathMatchers(HttpMethod.PUT, "/api/items/{id}", "/api/products/{id}", "/api/users/{id}").hasRole("ADMIN")
+                // .pathMatchers(HttpMethod.DELETE, "/api/items/{id}", "/api/products/{id}", "/api/users/{id}").hasRole("ADMIN")
+                .pathMatchers("/api/items/api/v1/items/**", "/api/products/api/v1/products/**", "/api/users/api/v1/users/**")
+                    .hasRole("ADMIN")
+                .anyExchange().authenticated();
             })
             .cors(csrf -> csrf.disable())
             .oauth2Login(withDefaults())
