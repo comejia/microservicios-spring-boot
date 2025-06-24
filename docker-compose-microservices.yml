@@ -35,6 +35,7 @@ services:
       - EUREKA_HOSTNAME=${EUREKA_HOSTNAME}
       - ZIPKIN_HOSTNAME=${ZIPKIN_HOSTNAME}
       - AUTH_HOSTNAME=${AUTH_HOSTNAME}
+      - ENABLE_TRACING=${ENABLE_TRACING}
     ports:
       - 8090:8090
     restart: always
@@ -58,6 +59,7 @@ services:
       - MARIADB_DATABASE=${MARIADB_DATABASE}
       - EUREKA_HOSTNAME=${EUREKA_HOSTNAME}
       - ZIPKIN_HOSTNAME=${ZIPKIN_HOSTNAME}
+      - ENABLE_TRACING=${ENABLE_TRACING}
     #ports:
       #- 8080:8080
     restart: always
@@ -81,6 +83,7 @@ services:
       - CONFIG_SERVER_HOSTNAME=${CONFIG_SERVER_HOSTNAME}
       - EUREKA_HOSTNAME=${EUREKA_HOSTNAME}
       - ZIPKIN_HOSTNAME=${ZIPKIN_HOSTNAME}
+      - ENABLE_TRACING=${ENABLE_TRACING}
     ports:
       - 8005:8005 # dev
       - 8006:8006 # test
@@ -106,6 +109,7 @@ services:
       - MARIADB_DATABASE=${MARIADB_DATABASE}
       - EUREKA_HOSTNAME=${EUREKA_HOSTNAME}
       - ZIPKIN_HOSTNAME=${ZIPKIN_HOSTNAME}
+      - ENABLE_TRACING=${ENABLE_TRACING}
     #ports:
       #- 8080:8080
     restart: always
@@ -126,6 +130,7 @@ services:
       - EUREKA_HOSTNAME=${EUREKA_HOSTNAME}
       - ZIPKIN_HOSTNAME=${ZIPKIN_HOSTNAME}
       - OAUTH_ISSUER=${AUTH_HOSTNAME}
+      - ENABLE_TRACING=${ENABLE_TRACING}
     ports:
       - 9100:9100
     restart: always
